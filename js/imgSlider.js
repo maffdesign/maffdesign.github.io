@@ -10,37 +10,35 @@ window.addEventListener('load', function () {
 
   let currentIndex = 0;
   let autoSlideInterval;
-  // 복사본을 제외한 실제 이미지 개수
   const realPageCount = pages.length - 1;
 
+  // 모바일 감지 함수
+  const isMobile = () => window.innerWidth <= 767;
+
   function updateSlider(withTransition = true) {
+    if (!imgSliderTrack) return;
     imgSliderTrack.style.transition = withTransition ? 'transform 0.5s ease-in-out' : 'none';
     imgSliderTrack.style.transform = `translateX(-${currentIndex * 100}%)`;
 
-    // 인디케이터: 마지막(복사본)에 있을 때는 0번 점 활성화
     const activeIndex = currentIndex === realPageCount ? 0 : currentIndex;
     dots.forEach((dot, index) => {
       dot.classList.toggle('active', index === activeIndex);
     });
-
-    // 버튼 제어: 무한 슬라이드이므로 버튼은 항상 보이게 설정
-    if (prevBtn) prevBtn.style.display = 'flex';
-    if (nextBtn) nextBtn.style.display = 'flex';
   }
 
   function startAutoSlide() {
     stopAutoSlide();
+    // 모바일이면 자동 슬라이드 시작 안 함
+    if (isMobile()) return;
+
     autoSlideInterval = setInterval(() => {
-      // 다음 페이지로 이동
       currentIndex++;
       updateSlider();
-
-      // 마지막(복사본)에 도착하면 즉시 0번 인덱스로 점프
       if (currentIndex === realPageCount) {
         setTimeout(() => {
           currentIndex = 0;
-          updateSlider(false); // 애니메이션 없이 즉시 이동
-        }, 500); // CSS transition 시간과 맞춰주세요
+          updateSlider(false);
+        }, 500);
       }
     }, 3000);
   }
@@ -49,12 +47,45 @@ window.addEventListener('load', function () {
     clearInterval(autoSlideInterval);
   }
 
-  // 좌우 버튼 로직 (무한 루프 적용)
-  if (prevBtn) {
+  // --- 모바일 터치 및 드래그 로직 ---
+  let touchStartX = 0;
+  let touchEndX = 0;
+
+  if (imgSlider) {
+    imgSlider.addEventListener(
+      'touchstart',
+      (e) => {
+        stopAutoSlide();
+        touchStartX = e.changedTouches[0].screenX;
+      },
+      { passive: true },
+    );
+
+    imgSlider.addEventListener('touchend', (e) => {
+      touchEndX = e.changedTouches[0].screenX;
+      const diff = touchStartX - touchEndX;
+
+      if (Math.abs(diff) > 50) {
+        // 50px 이상 이동 시 슬라이드
+        if (diff > 0)
+          nextBtn.click(); // 왼쪽으로 밀면 다음
+        else prevBtn.click(); // 오른쪽으로 밀면 이전
+      }
+      if (!isMobile()) startAutoSlide();
+    });
+
+    // 데스크탑 호버
+    imgSlider.addEventListener('mouseenter', stopAutoSlide);
+    imgSlider.addEventListener('mouseleave', () => {
+      if (!isMobile()) startAutoSlide();
+    });
+  }
+
+  if (prevBtn)
     prevBtn.addEventListener('click', () => {
       if (currentIndex === 0) {
         currentIndex = realPageCount;
-        updateSlider(false); // 마지막(복사본)으로 즉시 이동
+        updateSlider(false);
         setTimeout(() => {
           currentIndex--;
           updateSlider();
@@ -64,9 +95,8 @@ window.addEventListener('load', function () {
         updateSlider();
       }
     });
-  }
 
-  if (nextBtn) {
+  if (nextBtn)
     nextBtn.addEventListener('click', () => {
       currentIndex++;
       if (currentIndex === realPageCount) {
@@ -79,13 +109,6 @@ window.addEventListener('load', function () {
         updateSlider();
       }
     });
-  }
-
-  // 호버 및 인디케이터, 드래그 로직은 이전과 동일
-  if (imgSlider) {
-    imgSlider.addEventListener('mouseenter', stopAutoSlide);
-    imgSlider.addEventListener('mouseleave', startAutoSlide);
-  }
 
   dots.forEach((dot, idx) => {
     dot.addEventListener('click', () => {
@@ -94,7 +117,12 @@ window.addEventListener('load', function () {
     });
   });
 
-  // [드래그 로직은 위 방식과 맞게 인덱스 범위를 realPageCount로 제한하여 사용]
+  // 창 크기 변경 시 오토슬라이드 재시작/중지 감지
+  window.addEventListener('resize', () => {
+    if (isMobile()) stopAutoSlide();
+    else startAutoSlide();
+  });
+
   updateSlider();
   startAutoSlide();
 });
