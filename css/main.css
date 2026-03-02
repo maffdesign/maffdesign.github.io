@@ -351,11 +351,14 @@ button {
   justify-content: center;
 }
 .img-description > h6 {
-  font-size: 2rem;
+  font-size: 2.2rem;
   margin-bottom: 10px;
 }
 .img-description > ul > li {
-  margin: 20px 0;
+  margin: 15px 0;
+}
+.img-description > ul > li > p {
+  font-size: 1.75rem;
 }
 
 /* page */
@@ -685,6 +688,12 @@ footer {
   /* img-slider */
   .img-slider-wrap {
     width: 680px;
+  }
+  .img-description > ul > li {
+    margin: 10px 0;
+  }
+  .img-description > ul > li > p {
+    font-size: 1.65rem;
   }
   /* shorts-tablet */
   /* 1. 기본 레이아웃 조정 */
