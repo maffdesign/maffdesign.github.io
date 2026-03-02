@@ -18,6 +18,8 @@ li {
 
 html {
   font-size: 10px;
+  /* 스크롤 부드럽게 */
+  scroll-behavior: smooth;
 }
 body {
   font-family: 'Pretendard Variable', sans-serif;
@@ -353,7 +355,7 @@ button {
   margin: 20px 0;
 }
 
-/* 개별 페이지 */
+/* page */
 .page {
   min-width: 100%;
   display: flex;
@@ -380,24 +382,22 @@ button {
   border: none;
   border-radius: 50%;
 
-  /* 가로로 늘어나는 것을 방지하기 위해 크기 고정 */
+  /* 크기 고정 */
   width: 30px !important;
   height: 30px !important;
-  min-width: 30px; /* 최소 크기 보장 */
+  min-width: 30px;
 
   cursor: pointer;
   z-index: 10;
 
-  /* 정중앙 정렬을 위한 필수 속성 */
   display: flex;
-  align-items: center;
-  justify-content: center;
+  align-items: center; /* 수직 중앙 */
+  justify-content: center; /* 수평 중앙 */
 
-  /* 텍스트 크기 조절 */
-  font-size: 14px;
   padding: 0;
   margin: 0;
   color: #333;
+  flex-shrink: 0; /* 버튼이 찌그러지는 것 방지 */
 }
 .slider-btn > img {
   width: 40%;
@@ -438,27 +438,58 @@ button {
 }
 
 .img-indicator .dot.active {
-  background: #fff; /* 활성화되면 선명한 흰색 */
+  background: #fff;
 }
 
-/* shorts */
+/* shorts-pc */
 .short {
   margin-top: 80px;
-}
-.short > ul {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-}
-.short > ul > li {
-  width: 23.5%;
-}
-.short > ul > li > a {
+  width: 100%;
   position: relative;
+  /* 버튼이 리스트 영역 밖으로 배치될 공간 확보 */
+  padding: 0 80px;
+  box-sizing: border-box;
 }
-.short > ul > li > a > div.short-title {
+
+.short > ul.short-list {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 50px;
+  overflow-x: auto;
+  cursor: grab;
+  list-style: none;
+
+  /* 스크롤 스냅 제거 (자연스러운 버튼 이동을 위해 필수) */
+  /* scroll-snap-type: x mandatory; */
+  /* -webkit-overflow-scrolling: touch; */
+
+  padding: 0 0 20px 0;
+  width: max-content;
+  margin: 0 auto;
+  max-width: 100%;
+}
+
+.short > ul.short-list::-webkit-scrollbar {
+  display: none;
+}
+
+.short > ul.short-list > li {
+  width: 280px;
+  flex: 0 0 auto;
+  /* 스냅 정렬 제거 */
+  /* scroll-snap-align: center; */
+}
+
+.short > ul.short-list > li > a {
+  position: relative;
+  display: block;
+}
+
+.short > ul.short-list > li > a > div.short-title {
   opacity: 0;
   position: absolute;
+  top: 0;
+  left: 0;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -470,22 +501,83 @@ button {
   color: #fff;
   transition: 0.6s;
 }
-.short > ul > li > a:hover > div.short-title {
+
+.short > ul.short-list > li > a:hover > div.short-title {
   opacity: 1;
 }
-.short > ul > li > a > div.short-title > span {
+
+.short > ul.short-list > li > a > div.short-title > span {
   display: block;
   margin-bottom: 24px;
   font-size: 2rem;
 }
-.short > ul > li > a > div.short-title > img {
+
+.short > ul.short-list > li > a > div.short-title > img {
   width: 60px;
 }
+
 .short-thumnail {
   width: 100%;
+  display: block;
 }
 
-/* contact */
+/* 좌우 이동 버튼 스타일 */
+.short-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  background: #333;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: 0.3s;
+  border: none;
+}
+
+.short-btn:hover {
+  background: rgba(0, 0, 0, 0.4);
+}
+
+.short .prev-btn {
+  left: 0;
+}
+.short .next-btn {
+  right: 0;
+}
+
+/* 드래그 방지 및 이벤트 제어 */
+/* 1. 슬라이더 전체의 텍스트 선택 방지 */
+.short-list {
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+
+/* 2. 링크(a)는 클릭되어야 하므로 pointer-events: auto 유지 */
+.short-list a {
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+/* 3. 내부 이미지와 제목 등은 이벤트를 통과시켜 부모(short-list)로 전달 */
+.short-list a img,
+.short-list a .short-title,
+.short-list a span {
+  pointer-events: none; /* 핵심: 마우스 이벤트가 아래로 관통됨 */
+  -webkit-user-drag: none; /* 브라우저 이미지 드래그 방지 */
+}
+
+.short-list a:hover .short-title {
+  pointer-events: auto;
+}
+
+/* contact-pc */
 #contact {
   margin: 160px 0px;
 }
@@ -591,25 +683,17 @@ footer {
   .img-slider-wrap {
     width: 680px;
   }
+  /* shorts-tablet */
   .short {
     margin-top: 40px;
   }
-  .short > ul > li {
-    flex: 1 1 0;
-    margin: 0px 20px;
+  .short > ul.short-list {
+    gap: 30px;
   }
-  .short > ul > li:first-child {
-    margin-left: 0px;
+  .short > ul.short-list > li {
+    width: 220px; /* 타블렛용 카드 너비 */
   }
-  .short > ul > li:last-child {
-    margin-right: 0px;
-  }
-  .short > ul > li > a {
-    display: block;
-  }
-  .short > ul > li > a > img {
-    width: 100%;
-  }
+  /* contact-tablet */
   #contact {
     margin: 100px 0px;
   }
@@ -698,7 +782,8 @@ footer {
   #skill > ul > li:last-child {
     margin-bottom: 0px;
   }
-  /* slider */
+
+  /* slider-mobile */
   .slider-container {
     height: 550px;
   }
@@ -727,7 +812,7 @@ footer {
     transform: translateX(200px) scale(0.8);
   }
 
-  /* img slider */
+  /* img slider-mobile */
   .img-slider-wrap {
     width: 300px;
     display: flex;
@@ -755,22 +840,32 @@ footer {
     font-size: 1.6rem;
   }
 
+  /* shorts-mobile */
   .short {
+    padding: 0;
     margin-top: 40px;
   }
-  .short > ul > li {
-    width: 47%;
+  .short-btn {
+    display: none;
   }
-  .short > ul > li:nth-last-child(2n-1) {
-    margin-left: 6%;
-    margin-bottom: 20px;
+  .short > ul.short-list {
+    gap: 15px;
+    padding-left: 15px;
+    padding-right: 15px;
+    justify-content: flex-start;
   }
-  .short > ul > li > a {
-    display: block;
+  .short > ul.short-list > li {
+    width: 160px;
   }
-  .short > ul > li > a > img {
-    width: 100%;
+  .short > ul.short-list > li > a > div.short-title > span {
+    font-size: 1.6rem;
+    margin-bottom: 15px;
   }
+  .short > ul.short-list > li > a > div.short-title > img {
+    width: 40px;
+  }
+
+  /* contact-mobile */
   #contact {
     display: flex;
     flex-direction: column;
