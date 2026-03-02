@@ -1,6 +1,6 @@
 window.onload = function () {
   const cards = document.querySelectorAll('.card');
-  const dots = document.querySelectorAll('.dot');
+  const dots = document.querySelectorAll('.controls .dot');
   const sliderTrack = document.querySelector('.slider-container');
 
   let currentIndex = 0;
