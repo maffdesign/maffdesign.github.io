@@ -346,6 +346,9 @@ button {
 .img-description {
   width: 400px;
   text-align: left;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 .img-description > h6 {
   font-size: 2rem;
