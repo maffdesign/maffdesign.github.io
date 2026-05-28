@@ -1,0 +1,256 @@
+<style>
+  .doc {
+    font-family: var(--font-sans);
+    color: var(--color-text-primary);
+    max-width: 680px;
+    padding: 2rem 0;
+  }
+  .section-label {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-text-tertiary);
+    margin: 0 0 0.5rem;
+  }
+  .section-title {
+    font-size: 22px;
+    font-weight: 500;
+    margin: 0 0 0.75rem;
+  }
+  .body-text {
+    font-size: 15px;
+    line-height: 1.75;
+    color: var(--color-text-secondary);
+    margin: 0 0 1.5rem;
+  }
+  .divider {
+    border: none;
+    border-top: 0.5px solid var(--color-border-tertiary);
+    margin: 2rem 0;
+  }
+  .flow-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 1.5rem 0;
+    flex-wrap: wrap;
+  }
+  .flow-box {
+    background: var(--color-background-secondary);
+    border: 0.5px solid var(--color-border-tertiary);
+    border-radius: var(--border-radius-md);
+    padding: 10px 14px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--color-text-primary);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .flow-arrow {
+    color: var(--color-text-tertiary);
+    font-size: 14px;
+  }
+  .flow-box.highlight {
+    background: #eeedfe;
+    border-color: #afa9ec;
+    color: #3c3489;
+  }
+  .loss-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 10px;
+    margin: 1.25rem 0;
+  }
+  .loss-card {
+    background: var(--color-background-primary);
+    border: 0.5px solid var(--color-border-tertiary);
+    border-radius: var(--border-radius-lg);
+    padding: 1rem 1.1rem;
+  }
+  .loss-icon {
+    font-size: 18px;
+    color: #993c1d;
+    margin-bottom: 6px;
+  }
+  .loss-title {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--color-text-primary);
+    margin: 0 0 4px;
+  }
+  .loss-desc {
+    font-size: 12px;
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+    margin: 0;
+  }
+  .parser-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 10px;
+    margin: 1.25rem 0;
+  }
+  .parser-card {
+    background: var(--color-background-primary);
+    border: 0.5px solid var(--color-border-tertiary);
+    border-radius: var(--border-radius-lg);
+    padding: 1rem 1.1rem;
+  }
+  .parser-name {
+    font-size: 13px;
+    font-weight: 500;
+    color: #185fa5;
+    margin: 0 0 4px;
+  }
+  .parser-tag {
+    display: inline-block;
+    font-size: 11px;
+    background: #e6f1fb;
+    color: #185fa5;
+    border-radius: 4px;
+    padding: 2px 7px;
+    margin-bottom: 6px;
+  }
+  .parser-desc {
+    font-size: 12px;
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+    margin: 0;
+  }
+  .callout {
+    background: var(--color-background-secondary);
+    border-left: 3px solid #7f77dd;
+    border-radius: 0 var(--border-radius-md) var(--border-radius-md) 0;
+    padding: 0.9rem 1.1rem;
+    margin: 1.5rem 0;
+  }
+  .callout p {
+    font-size: 14px;
+    color: var(--color-text-secondary);
+    line-height: 1.7;
+    margin: 0;
+  }
+</style>
+
+<div class="doc">
+  <h2 class="sr-only">LLM이 문서를 읽는 방법: 파싱 개념 소개</h2>
+
+  <p class="section-label">AI 리터러시 기초</p>
+  <h1 class="section-title">LLM은 문서를 어떻게 읽는가</h1>
+  <p class="body-text">
+    LLM(대형 언어 모델)은 텍스트만 직접 이해합니다. PDF·Word·Excel 같은 파일은 이미지, 표, 서식 등이 복잡하게 얽혀 있어 그대로는 읽을 수 없습니다. 이
+    때문에 <strong>파싱(parsing)</strong>이라는 변환 과정이 필요합니다.
+  </p>
+
+  <div class="flow-row">
+    <div class="flow-box">
+      <i class="ti ti-file-description" aria-hidden="true"></i> 원본 문서<br /><span
+        style="font-size: 11px; font-weight: 400; color: var(--color-text-secondary)"
+        >PDF, DOCX, XLSX…</span
+      >
+    </div>
+    <span class="flow-arrow">→</span>
+    <div class="flow-box highlight">
+      <i class="ti ti-settings" aria-hidden="true"></i> 파싱<br /><span style="font-size: 11px; font-weight: 400; color: #534ab7"
+        >구조·텍스트 추출</span
+      >
+    </div>
+    <span class="flow-arrow">→</span>
+    <div class="flow-box">
+      <i class="ti ti-message-2" aria-hidden="true"></i> LLM 입력<br /><span
+        style="font-size: 11px; font-weight: 400; color: var(--color-text-secondary)"
+        >순수 텍스트</span
+      >
+    </div>
+  </div>
+
+  <div class="callout">
+    <p>
+      파싱이란 파일 형식에서 <strong>의미 있는 텍스트와 구조</strong>를 꺼내 LLM이 처리할 수 있는 형태로 바꾸는 작업입니다. 번역가가 외국어를 우리말로
+      옮기듯, 파서는 파일 언어를 AI 언어로 바꿉니다.
+    </p>
+  </div>
+
+  <hr class="divider" />
+
+  <p class="section-label">파싱 중 발생하는 정보 손실</p>
+  <h2 style="font-size: 18px; font-weight: 500; margin: 0 0 0.5rem">무엇이 사라지는가</h2>
+  <p class="body-text">파싱 과정에서 원본 문서의 일부 정보가 누락되거나 왜곡될 수 있습니다. 이를 <strong>파싱 손실</strong>이라 합니다.</p>
+
+  <div class="loss-grid">
+    <div class="loss-card">
+      <div class="loss-icon"><i class="ti ti-layout-grid" aria-hidden="true"></i></div>
+      <p class="loss-title">표 구조 붕괴</p>
+      <p class="loss-desc">표의 행·열 관계가 단순 텍스트 나열로 바뀌어 데이터 맥락이 사라집니다.</p>
+    </div>
+    <div class="loss-card">
+      <div class="loss-icon"><i class="ti ti-photo" aria-hidden="true"></i></div>
+      <p class="loss-title">이미지·차트 누락</p>
+      <p class="loss-desc">시각 자료는 텍스트로 변환이 불가능해 그냥 제거되거나 빈칸이 됩니다.</p>
+    </div>
+    <div class="loss-card">
+      <div class="loss-icon"><i class="ti ti-heading" aria-hidden="true"></i></div>
+      <p class="loss-title">서식·계층 손실</p>
+      <p class="loss-desc">제목 크기, 굵기, 들여쓰기 등 문서 위계가 평탄화됩니다.</p>
+    </div>
+    <div class="loss-card">
+      <div class="loss-icon"><i class="ti ti-file-text" aria-hidden="true"></i></div>
+      <p class="loss-title">컬럼 혼용</p>
+      <p class="loss-desc">다단 레이아웃(신문형 컬럼)의 텍스트 흐름이 뒤섞일 수 있습니다.</p>
+    </div>
+    <div class="loss-card">
+      <div class="loss-icon"><i class="ti ti-scan" aria-hidden="true"></i></div>
+      <p class="loss-title">스캔 PDF 오인식</p>
+      <p class="loss-desc">스캔본은 이미지라서 OCR 없이는 글자를 아예 읽지 못합니다.</p>
+    </div>
+    <div class="loss-card">
+      <div class="loss-icon"><i class="ti ti-math-function" aria-hidden="true"></i></div>
+      <p class="loss-title">수식·특수 기호</p>
+      <p class="loss-desc">LaTeX 수식이나 특수 기호가 깨지거나 엉뚱한 문자로 바뀝니다.</p>
+    </div>
+  </div>
+
+  <hr class="divider" />
+
+  <p class="section-label">대표 파싱 도구</p>
+  <h2 style="font-size: 18px; font-weight: 500; margin: 0 0 0.5rem">파서를 쓰면 어떻게 달라지나</h2>
+  <p class="body-text">
+    기본 텍스트 추출보다 훨씬 정확하게 문서 구조를 살려주는 파싱 도구들이 있습니다. 목적에 맞는 도구를 선택하면 LLM 답변의 품질이 크게 올라갑니다.
+  </p>
+
+  <div class="parser-grid">
+    <div class="parser-card">
+      <p class="parser-name">
+        <i class="ti ti-file-search" aria-hidden="true" style="font-size: 15px; margin-right: 4px"></i>LlamaIndex<br />LlamaParse
+      </p>
+      <span class="parser-tag">PDF 특화</span>
+      <p class="parser-desc">PDF의 표·수식·이미지를 고품질로 추출. RAG 파이프라인 연동에 최적화. 클라우드 API 방식.</p>
+    </div>
+    <div class="parser-card">
+      <p class="parser-name">
+        <i class="ti ti-file-code" aria-hidden="true" style="font-size: 15px; margin-right: 4px"></i>Microsoft<br />MarkItDown
+      </p>
+      <span class="parser-tag">다형식 범용</span>
+      <p class="parser-desc">PDF·DOCX·XLSX·PPTX·HTML·이미지 등을 Markdown으로 변환. 로컬 실행, 오픈소스.</p>
+    </div>
+    <div class="parser-card">
+      <p class="parser-name"><i class="ti ti-brain" aria-hidden="true" style="font-size: 15px; margin-right: 4px"></i>IBM<br />Docling</p>
+      <span class="parser-tag">AI 기반</span>
+      <p class="parser-desc">딥러닝으로 레이아웃 분석. 표·그림 위치까지 정밀 파악. 로컬 실행, 연구·기업용.</p>
+    </div>
+    <div class="parser-card">
+      <p class="parser-name"><i class="ti ti-transform" aria-hidden="true" style="font-size: 15px; margin-right: 4px"></i>Unstructured<br />.io</p>
+      <span class="parser-tag">엔터프라이즈</span>
+      <p class="parser-desc">30개 이상 파일 형식 지원. 대용량 문서 파이프라인 처리에 강점. API·로컬 모두 가능.</p>
+    </div>
+  </div>
+
+  <div class="callout" style="margin-top: 2rem">
+    <p>
+      💡 <strong>핵심 정리</strong> — 파싱 품질이 LLM 답변 품질을 결정합니다. "쓰레기가 들어가면 쓰레기가 나온다(Garbage In, Garbage Out)"는 AI에서도
+      그대로 적용됩니다. 문서를 AI에 넣기 전, 어떤 파서를 쓸지 선택하는 것이 워크플로의 첫 번째 설계 결정입니다.
+    </p>
+  </div>
+</div>
