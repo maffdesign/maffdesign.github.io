@@ -98,18 +98,18 @@
     <section class="contact-section" id="contact">
       <div class="section-shell contact-shell">
         <div class="contact-copy"><p class="section-label light-label">05 <span>/</span> START A CONVERSATION</p><h2>다음 흐름을<br><em>함께 만들어볼까요?</em></h2><p>현재 팀이 겪는 과제나 바꾸고 싶은 업무를 알려주세요.<br>maff가 적합한 시작점을 함께 찾아보겠습니다.</p><a class="contact-email" href="mailto:maff@maff.kr">maff@maff.kr <span>↗</span></a></div>
-        <form class="contact-form" id="contact-form">
+        <form class="contact-form" id="contact-form" action="https://formspree.io/f/mrpeqkpj" method="POST">
           <label for="contact-name">이름 또는 회사명</label><input id="contact-name" name="name" autocomplete="name" required placeholder="성함 또는 브랜드명을 입력해 주세요">
           <label for="contact-email">회신 받을 이메일</label><input id="contact-email" name="email" type="email" autocomplete="email" required placeholder="you@company.com">
           <label for="contact-topic">상담 내용</label><select id="contact-topic" name="topic" required><option value="" disabled selected>관심 있는 분야를 선택해 주세요</option><option>AI 마케팅 업무 자동화</option><option>콘텐츠 제작 및 웹·상세페이지</option><option>고객·시장 데이터와 퍼포먼스 마케팅</option><option>직원 AI 활용 교육</option><option>MCP·비즈니스 도구 연동</option><option>스마트스토어 및 커머스 운영</option><option>기타 / 통합 솔루션</option></select>
           <label for="contact-message">현재 고민이나 목표</label><textarea id="contact-message" name="message" rows="4" required placeholder="프로젝트 목표, 일정, 필요한 지원을 편하게 적어주세요."></textarea>
           <button class="button button-primary form-submit" type="submit">메일로 상담 문의 보내기 <span>↗</span></button>
-          <p class="form-note" id="form-status" aria-live="polite">제출하면 메일 앱에서 문의 내용을 확인하고 직접 보내실 수 있습니다.</p>
+          <p class="form-note" id="form-status" aria-live="polite">제출한 상담 내용은 maff로 바로 접수됩니다.</p>
         </form>
       </div>
     </section>
   </main>
   <footer class="site-footer section-shell"><a class="wordmark footer-wordmark" href="#top">maff<span class="wordmark-dot">.</span></a><p class="footer-motto">moment <b>and</b> flow</p><div class="footer-meta"><span>AI · MARKETING · CONTENT · LEARNING</span><span>© 2026 MAFF</span></div></footer>
-  <script src="script.js?v=20261008-layout-3"></script>
+  <script src="script.js?v=20261008-formspree-1"></script>
 </body>
 </html>

@@ -20,27 +20,44 @@ if (menuButton && nav) {
 
 const contactForm = document.querySelector('#contact-form');
 const formStatus = document.querySelector('#form-status');
+const formspreeEndpoint = 'https://formspree.io/f/mrpeqkpj';
 
 if (contactForm) {
   contactForm.addEventListener('submit', (event) => {
     event.preventDefault();
     if (!contactForm.reportValidity()) return;
 
-    const formData = new FormData(contactForm);
-    const subject = `[maff 프로젝트 상담] ${formData.get('topic')} - ${formData.get('name')}`;
-    const body = [
-      'maff 프로젝트 상담 문의',
-      '',
-      `이름/회사명: ${formData.get('name')}`,
-      `회신 이메일: ${formData.get('email')}`,
-      `관심 분야: ${formData.get('topic')}`,
-      '',
-      '현재 고민이나 목표:',
-      formData.get('message'),
-    ].join('\n');
+    const submitButton = contactForm.querySelector('[type="submit"]');
+    const originalButtonContent = submitButton?.innerHTML;
+    if (submitButton) {
+      submitButton.disabled = true;
+      submitButton.textContent = '문의 전송 중…';
+    }
+    if (formStatus) formStatus.textContent = '상담 내용을 전송하고 있습니다.';
 
-    const mailto = `mailto:maff@maff.kr?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-    if (formStatus) formStatus.textContent = '메일 앱에서 문의 내용을 확인한 뒤 보내기를 눌러주세요.';
-    window.location.href = mailto;
+    fetch(formspreeEndpoint, {
+      method: 'POST',
+      body: new FormData(contactForm),
+      headers: { Accept: 'application/json' },
+    })
+      .then(async (response) => {
+        const result = await response.json().catch(() => ({}));
+        if (!response.ok) {
+          const detail = result.errors?.map((error) => error.message).filter(Boolean).join(' ');
+          throw new Error(detail || '전송에 실패했습니다. 잠시 후 다시 시도해 주세요.');
+        }
+
+        contactForm.reset();
+        if (formStatus) formStatus.textContent = '문의가 접수되었습니다. 확인 후 회신드리겠습니다.';
+      })
+      .catch((error) => {
+        if (formStatus) formStatus.textContent = error.message || '네트워크 오류로 전송하지 못했습니다. 잠시 후 다시 시도해 주세요.';
+      })
+      .finally(() => {
+        if (submitButton) {
+          submitButton.disabled = false;
+          submitButton.innerHTML = originalButtonContent;
+        }
+      });
   });
 }
