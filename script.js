@@ -18,14 +18,29 @@ if (menuButton && nav) {
   });
 }
 
-// Add the company's approved inquiry email here before launch.
-const contactEmail = '';
-document.querySelectorAll('a[href="mailto:"]').forEach((link) => {
-  if (contactEmail) link.href = `mailto:${contactEmail}`;
-  else {
-    link.addEventListener('click', (event) => {
-      event.preventDefault();
-      window.alert('문의 이메일을 연결할 예정입니다. 연락처를 확정한 뒤 이 버튼에 연결해 주세요.');
-    });
-  }
-});
+const contactForm = document.querySelector('#contact-form');
+const formStatus = document.querySelector('#form-status');
+
+if (contactForm) {
+  contactForm.addEventListener('submit', (event) => {
+    event.preventDefault();
+    if (!contactForm.reportValidity()) return;
+
+    const formData = new FormData(contactForm);
+    const subject = `[maff 프로젝트 상담] ${formData.get('topic')} - ${formData.get('name')}`;
+    const body = [
+      'maff 프로젝트 상담 문의',
+      '',
+      `이름/회사명: ${formData.get('name')}`,
+      `회신 이메일: ${formData.get('email')}`,
+      `관심 분야: ${formData.get('topic')}`,
+      '',
+      '현재 고민이나 목표:',
+      formData.get('message'),
+    ].join('\n');
+
+    const mailto = `mailto:maff@maff.kr?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    if (formStatus) formStatus.textContent = '메일 앱에서 문의 내용을 확인한 뒤 보내기를 눌러주세요.';
+    window.location.href = mailto;
+  });
+}
