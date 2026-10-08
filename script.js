@@ -48,7 +48,7 @@ if (contactForm) {
         }
 
         contactForm.reset();
-        if (formStatus) formStatus.textContent = '문의가 접수되었습니다. 확인 후 회신드리겠습니다.';
+        if (formStatus) formStatus.textContent = '문의가 성공적으로 전송되었습니다!';
       })
       .catch((error) => {
         if (formStatus) formStatus.textContent = error.message || '네트워크 오류로 전송하지 못했습니다. 잠시 후 다시 시도해 주세요.';
